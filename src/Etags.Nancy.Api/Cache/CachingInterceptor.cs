@@ -11,6 +11,7 @@ namespace Etags.Nancy.Api.Cache
     {
         public void Intercept(IInvocation invocation)
         {
+            //Writes cache-bust - make cache ID a Sha1 hash of UUID
             invocation.Proceed();
         }
     }
