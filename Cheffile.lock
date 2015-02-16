@@ -1,0 +1,10 @@
+GIT
+  remote: https://github.com/ctrabold/chef-redis
+  ref: master
+  sha: e3a89f34d0f5b81867ae9e07a9404ac89e1ff61c
+  specs:
+    redis (0.0.4)
+
+DEPENDENCIES
+  redis (>= 0)
+

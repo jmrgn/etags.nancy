@@ -1,4 +1,6 @@
-﻿using Castle.MicroKernel.Registration;
+﻿using System.IO;
+using System.Net;
+using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Etags.Nancy.Api.Cache;
 using Etags.Nancy.Api.Persistence;
@@ -6,6 +8,9 @@ using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Bootstrappers.Windsor;
 using Nancy.Routing;
+using NHibernate;
+using ServiceStack.Redis;
+using StackExchange.Redis;
 
 namespace Etags.Nancy.Api
 {
@@ -16,6 +21,20 @@ namespace Etags.Nancy.Api
         {
             existingContainer.Register(Component.For<CachingInterceptor>()
                                         .LifeStyle.Transient);
+
+           
+            existingContainer.Register(
+                Component.For<IRedisClientsManager>()
+                .UsingFactoryMethod(GetThisCache).LifestyleSingleton());
+
+            existingContainer.Register(
+                Component.For<ConnectionMultiplexer>()
+                .UsingFactoryMethod(GetConnectionMultiplexer).LifestyleSingleton());
+
+            existingContainer.Register(Component.For<ICache>()
+                .ImplementedBy<RedisCache>()
+                .LifeStyle.Transient);
+            
             existingContainer.Register(
                 Component.For<IPersonRepository>()
                 .ImplementedBy<PersonRepository>()
@@ -23,6 +42,12 @@ namespace Etags.Nancy.Api
                 .LifeStyle.Transient);
             
             base.ConfigureApplicationContainer(existingContainer);
+        }
+
+        public static ConnectionMultiplexer GetConnectionMultiplexer()
+        {
+            var multiplexer = ConnectionMultiplexer.Connect("127.0.0.1:6379");
+            return multiplexer;
         }
 
     }

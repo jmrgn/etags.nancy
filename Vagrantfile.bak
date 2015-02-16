@@ -3,13 +3,7 @@
 $script = <<SCRIPT
 
 echo Installing dependencies...
-sudo apt-get install -y unzip curl make
-
-echo Fetching Redis...
-wget http://download.redis.io/releases/redis-2.8.19.tar.gz
-tar xzf redis-2.8.19.tar.gz
-cd redis-2.8.19
-make
+sudo apt-get install -y unzip curl
 
 SCRIPT
 
@@ -31,7 +25,24 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     redis1.vm.hostname = "redis1"
     # redis1.vm.network "private_network", ip: "172.20.20.91"
     redis1.vm.network "forwarded_port", guest: 6379, host: 6379
-    redis1.vm.provision "shell", inline: $script
+    redis1.vm.provision :chef_solo do |chef|
+    chef.cookbooks_path = ["cookbooks"]
+    chef.add_recipe 'redis'
+
+    chef.json = {
+      :git   => {
+        :prefix => "/usr/local"
+      },
+      :redis => {
+        :bind        => "127.0.0.1",
+        :port        => "6379",
+        :config_path => "/etc/redis/redis.conf",
+        :daemonize   => "yes",
+        :timeout     => "300",
+        :loglevel    => "notice"
+      }
+    }
+  end
   end
   
   
