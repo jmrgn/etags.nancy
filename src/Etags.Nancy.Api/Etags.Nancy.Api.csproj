@@ -102,7 +102,7 @@
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Cache\CachingInterceptor.cs" />
     <Compile Include="Cache\ICache.cs" />
-    <Compile Include="Cache\ServiceStackCache.cs" />
+    <Compile Include="Cache\RedisCache.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="Maps\PersonMap.cs" />

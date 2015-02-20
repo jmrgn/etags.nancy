@@ -22,11 +22,6 @@ namespace Etags.Nancy.Api
             existingContainer.Register(Component.For<CachingInterceptor>()
                                         .LifeStyle.Transient);
 
-           
-            existingContainer.Register(
-                Component.For<IRedisClientsManager>()
-                .UsingFactoryMethod(GetThisCache).LifestyleSingleton());
-
             existingContainer.Register(
                 Component.For<ConnectionMultiplexer>()
                 .UsingFactoryMethod(GetConnectionMultiplexer).LifestyleSingleton());
