@@ -47,10 +47,19 @@ namespace Etags.Nancy.Api
                 Id = 4 
             };
 
-            personRepository.Add(person1);
-            personRepository.Add(person2);
-            personRepository.Add(person3);
-            personRepository.Add(person4);
+            var person5 = new Person
+            {
+                FamilyName = "Bla",
+                GivenName = "Blargh",
+                HonorificSuffix = "Jr.",
+
+            };
+
+           // personRepository.Add(person1);
+           // personRepository.Add(person2);
+           //  personRepository.Add(person3);
+           //  personRepository.Add(person4);
+            personRepository.Add(person5);
         }
     }
 }

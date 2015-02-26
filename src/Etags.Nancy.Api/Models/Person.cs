@@ -13,5 +13,6 @@ namespace Etags.Nancy.Api.Models
         public virtual string FamilyName { get; set; }
         public virtual string HonorificPrefix { get; set; }
         public virtual string HonorificSuffix { get; set; }
+        public virtual DateTime LastModifiedDate { get; set; }
     }
 }

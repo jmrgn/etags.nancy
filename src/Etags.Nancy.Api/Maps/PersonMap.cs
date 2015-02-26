@@ -17,6 +17,7 @@ namespace Etags.Nancy.Api.Maps
             Map(a => a.GivenName);
             Map(a => a.HonorificPrefix);
             Map(a => a.HonorificSuffix);
+            Map(a => a.LastModifiedDate);
         }
     }
 }

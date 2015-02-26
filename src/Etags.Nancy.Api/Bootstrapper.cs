@@ -16,7 +16,16 @@ namespace Etags.Nancy.Api
 {
     public class Bootstrapper : WindsorNancyBootstrapper
     {
-
+        protected override void ApplicationStartup(IWindsorContainer container, IPipelines pipelines)
+        {
+            pipelines.BeforeRequest += (ctx) =>
+            {
+                var util = container.Resolve<CacheUtility>();
+                util.CheckForIfNonMatch(ctx);
+                return ctx.Response;
+            };
+            base.ApplicationStartup(container, pipelines); 
+        }
         protected override void ConfigureApplicationContainer(IWindsorContainer existingContainer)
         {
             existingContainer.Register(Component.For<CachingInterceptor>()
@@ -35,9 +44,13 @@ namespace Etags.Nancy.Api
                 .ImplementedBy<PersonRepository>()
                 .Interceptors<CachingInterceptor>()
                 .LifeStyle.Transient);
-            
+
+            existingContainer.Register(Component.For<CacheUtility>().LifeStyle.Transient);
+
             base.ConfigureApplicationContainer(existingContainer);
         }
+
+
 
         public static ConnectionMultiplexer GetConnectionMultiplexer()
         {

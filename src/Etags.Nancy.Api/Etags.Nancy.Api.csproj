@@ -101,8 +101,10 @@
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Cache\CachingInterceptor.cs" />
+    <Compile Include="Cache\HashUtility.cs" />
     <Compile Include="Cache\ICache.cs" />
     <Compile Include="Cache\RedisCache.cs" />
+    <Compile Include="CacheUtility.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="Maps\PersonMap.cs" />
@@ -116,7 +118,9 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

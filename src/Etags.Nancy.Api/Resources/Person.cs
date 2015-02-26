@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Nancy;
+using Newtonsoft.Json;
 using Models = Etags.Nancy.Api.Models;
 
 namespace Etags.Nancy.Api.Resources
@@ -17,6 +19,7 @@ namespace Etags.Nancy.Api.Resources
             this.GivenName = person.GivenName;
             this.HonorificPrefix = person.HonorificPrefix;
             this.HonorificSuffix = person.HonorificSuffix;
+            this.LastModifiedDate = person.LastModifiedDate;
         }
 
         [JsonProperty("id")]
@@ -33,5 +36,27 @@ namespace Etags.Nancy.Api.Resources
 
         [JsonProperty("honorificSuffix")]
         public string HonorificSuffix { get; set; }
+
+        [JsonProperty("lastModifiedDate")]
+        public DateTime LastModifiedDate { get; set; }
+    }
+    public static class PersonExtension
+    {
+        public static Models.Person ToModel(this Resources.Person person)
+        {
+            var model = new Models.Person
+            {
+                FamilyName = person.FamilyName,
+                GivenName = person.GivenName,
+                HonorificPrefix = person.HonorificPrefix,
+                HonorificSuffix = person.HonorificSuffix,
+                Id = person.Id,
+                LastModifiedDate = person.LastModifiedDate
+            };
+
+            return model;
+        }
     }
 }
+
+

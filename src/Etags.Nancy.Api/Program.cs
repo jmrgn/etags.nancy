@@ -18,7 +18,7 @@ namespace Etags.Nancy.Api
             }
 
             Global.BuildSessionFactory();
-            //Data.Create();
+            // Data.Create();
             using (WebApp.Start<Startup>(url))
             {
                 Console.WriteLine("Running on {0}", url);

@@ -13,5 +13,6 @@ namespace Etags.Nancy.Api.Persistence
         Person Get(int id);
         IEnumerable<Person> GetAll();
         void Add(Person person);
+        void Edit(Person person);
     }
 }

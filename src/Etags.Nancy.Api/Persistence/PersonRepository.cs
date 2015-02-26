@@ -36,7 +36,18 @@ namespace Etags.Nancy.Api.Persistence
             using (ISession session = Global.SessionFactory.OpenSession())
             using (ITransaction txn = session.BeginTransaction())
             {
+                person.LastModifiedDate = DateTime.UtcNow;
                 session.Save(person);
+                txn.Commit();
+            }
+        }
+
+        public void Edit(Person person)
+        {
+            using (ISession session = Global.SessionFactory.OpenSession())
+            using (ITransaction txn = session.BeginTransaction())
+            {
+                session.Merge(person);
                 txn.Commit();
             }
         }
