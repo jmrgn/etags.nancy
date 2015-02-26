@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Etags.Nancy.Api.Models;
 using NHibernate;
@@ -16,6 +17,7 @@ namespace Etags.Nancy.Api.Persistence
         }
         public Person Get(int id)
         {
+            Thread.Sleep(750);
             using (ISession session = Global.SessionFactory.OpenSession())
             {
                 return session.QueryOver<Person>().Where(p => p.Id == id).SingleOrDefault();
@@ -24,6 +26,7 @@ namespace Etags.Nancy.Api.Persistence
 
         public IEnumerable<Person> GetAll()
         {
+            Thread.Sleep(1500);
             using (ISession session = Global.SessionFactory.OpenSession())
             {
                 return session.QueryOver<Person>()
@@ -47,7 +50,8 @@ namespace Etags.Nancy.Api.Persistence
             using (ISession session = Global.SessionFactory.OpenSession())
             using (ITransaction txn = session.BeginTransaction())
             {
-                session.Merge(person);
+                person.LastModifiedDate = DateTime.UtcNow;
+                session.SaveOrUpdate(person);
                 txn.Commit();
             }
         }

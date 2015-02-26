@@ -26,7 +26,7 @@ namespace Etags.Nancy.Api.Cache
             if (ShouldInvalidateCache(invocation))
             {
                 var arg = (Person)invocation.Arguments[0];
-                var toRemove = string.Format("{0}-{1}", arg.Id, arg.LastModifiedDate); 
+                var toRemove = string.Format("{0}-{1}", arg.Id, arg.LastModifiedDate.Ticks); 
                 cache.Delete(toRemove);
             }
 
@@ -52,7 +52,6 @@ namespace Etags.Nancy.Api.Cache
                 cache.AddOrUpdate(id.ToString(), toCache, 20000);
                 var res = cache.Get(id.ToString());
             }
-            
         }
 
         public bool ShouldUpdateCache(IInvocation invocation)

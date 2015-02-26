@@ -6,6 +6,7 @@ using Etags.Nancy.Api.Cache;
 using Etags.Nancy.Api.Resources;
 using Etags.Nancy.Api.Persistence;
 using Nancy;
+using Nancy.ModelBinding;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -26,7 +27,7 @@ namespace Etags.Nancy.Api.Modules
             Put["/persons/{id}"] = EditPerson;
             OnError += (ctx, ex) =>
             {
-                return ex.Message;
+                return Response.AsText(ex.Message);
             };
             // http://stackoverflow.com/questions/12726113/does-nancyfx-support-static-content-caching-via-the-etag-and-last-modified-heade
             // http://simoncropp.com/conditionalresponseswithnancyfx
@@ -66,8 +67,7 @@ namespace Etags.Nancy.Api.Modules
 
         private dynamic AddPerson(dynamic req)
         {
-            var serializer = new JsonSerializer();
-            var person = serializer.Deserialize<Resources.Person>(req);
+            var person = this.Bind<Resources.Person>(f => f.Id, f => f.LastModifiedDate);
             var personModel = person.ToModel();
             repository.Add(personModel);
             var result = new Person(personModel);
@@ -79,12 +79,10 @@ namespace Etags.Nancy.Api.Modules
 
         private dynamic EditPerson(dynamic req)
         {
-            var serializer = new JsonSerializer();
-            var person = serializer.Deserialize<Resources.Person>(req);
-            var old = repository.Get(req.Id);
-
-            var personModel = person.ToModel();
-            repository.Edit(personModel);
+            var person = this.Bind<Resources.Person>(f => f.LastModifiedDate);
+            person.Id = req.Id;
+            var personModel = repository.Get(person.Id);
+            repository.Edit(person.ToModel(personModel));
             var result = new Person(personModel);
             return Negotiate.WithModel(result)
                             .WithStatusCode(HttpStatusCode.OK)

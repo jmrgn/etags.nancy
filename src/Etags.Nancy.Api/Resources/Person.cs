@@ -56,6 +56,16 @@ namespace Etags.Nancy.Api.Resources
 
             return model;
         }
+
+        public static Models.Person ToModel(this Resources.Person person, Models.Person model)
+        {
+            model.FamilyName = person.FamilyName ?? model.FamilyName;
+            model.GivenName = person.GivenName?? model.GivenName;
+            model.HonorificPrefix = person.HonorificPrefix ?? model.HonorificPrefix;
+            model.HonorificSuffix = person.HonorificSuffix ?? model.HonorificSuffix;
+
+            return model;
+        }
     }
 }
 
